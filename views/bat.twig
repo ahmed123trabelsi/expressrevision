@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Informations des Niveaux de Bâtiments</title>
+</head>
+<body>
+
+    <h1>Informations des Niveaux de Bâtiments</h1>
+    <form >
+        <label for="idNiveau">ID du Niveau :</label>
+        <input type="text" id="idNiveau" name="idNiveau" required>
+        <button type="submit"   onclick="construction()">Constructionn</button>
+        <button type="button" id="btnSomme">Somme</button>
+    </form>
+
+<script src="/socket.io/socket.io.js"></script>
+    <script>
+       document.getElementById('btnSomme').addEventListener('click', function() {
+        fetch('/battiment/somme-batiments')
+            .then(response => response.json())
+            .then(data => {
+                alert("La somme des niveaux des bâtiments à Tunis est : " + data.somme);
+                      p = document.createElement('p')
+        p.innerText= "somme est :"+data.somme
+        document.body.append(p)
+            })
+            .catch(error => console.error('Erreur:', error));
+    });
+        const socket = io(); // Initialize Socket.IO
+    function construction(){
+            var id= document.getElementById("idNiveau").value
+              socket.emit("constructionn",id);
+    }
+      
+    socket.emit("demande_niveaux_non_construits"); 
+// Request for non-constructed levels
+    
+   socket.on("msg",(data)=>{
+        console.log(data)
+        p = document.createElement('p')
+        p.innerText= data
+        document.body.append(p)
+        }) 
+        
+
+
+    </script>
+</body>
+</html>
